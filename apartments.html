@@ -19,9 +19,19 @@
       <li><a href="apartments.html" class="active">Квартиры</a></li>
       <li><a href="index.html#services">Услуги</a></li>
       <li><a href="index.html#about">О нас</a></li>
-      <li><a href="index.html#contact" class="navbar-cta">Связаться</a></li>
+      <li><a href="contacts.html" class="navbar-cta">Контакты</a></li>
     </ul>
+    <button class="burger" id="burger" aria-label="Меню">
+      <span></span><span></span><span></span>
+    </button>
   </nav>
+  <div class="mobile-nav" id="mobileNav">
+    <a href="index.html">Главная</a>
+    <a href="apartments.html">Квартиры</a>
+    <a href="index.html#services">Услуги</a>
+    <a href="index.html#about">О нас</a>
+    <a href="contacts.html" class="mob-cta">Контакты</a>
+  </div>
 
   <!-- PAGE HERO -->
   <div class="page-hero">
@@ -104,8 +114,8 @@
             <div class="apt-feature">🏢 <strong>5/9</strong>&nbsp;этаж</div>
           </div>
           <div class="apt-actions">
-            <a href="#" class="btn-apt-primary">Подробнее</a>
-            <a href="tel:+77273334455" class="btn-apt-secondary">📞 Звонок</a>
+            <a href="apartment-detail.html" class="btn-apt-primary">Подробнее</a>
+            <a href="https://wa.me/77001929260" target="_blank" class="btn-apt-secondary">💬 WA</a>
           </div>
         </div>
       </div>
@@ -129,8 +139,8 @@
             <div class="apt-feature">🏢 <strong>8/12</strong>&nbsp;этаж</div>
           </div>
           <div class="apt-actions">
-            <a href="#" class="btn-apt-primary">Подробнее</a>
-            <a href="tel:+77273334455" class="btn-apt-secondary">📞 Звонок</a>
+            <a href="apartment-detail.html" class="btn-apt-primary">Подробнее</a>
+            <a href="https://wa.me/77001929260" target="_blank" class="btn-apt-secondary">💬 WA</a>
           </div>
         </div>
       </div>
@@ -154,8 +164,8 @@
             <div class="apt-feature">🏢 <strong>14/16</strong>&nbsp;этаж</div>
           </div>
           <div class="apt-actions">
-            <a href="#" class="btn-apt-primary">Подробнее</a>
-            <a href="tel:+77273334455" class="btn-apt-secondary">📞 Звонок</a>
+            <a href="apartment-detail.html" class="btn-apt-primary">Подробнее</a>
+            <a href="https://wa.me/77001929260" target="_blank" class="btn-apt-secondary">💬 WA</a>
           </div>
         </div>
       </div>
@@ -179,8 +189,8 @@
             <div class="apt-feature">🏢 <strong>3/9</strong>&nbsp;этаж</div>
           </div>
           <div class="apt-actions">
-            <a href="#" class="btn-apt-primary">Подробнее</a>
-            <a href="tel:+77273334455" class="btn-apt-secondary">📞 Звонок</a>
+            <a href="apartment-detail.html" class="btn-apt-primary">Подробнее</a>
+            <a href="https://wa.me/77001929260" target="_blank" class="btn-apt-secondary">💬 WA</a>
           </div>
         </div>
       </div>
@@ -204,8 +214,8 @@
             <div class="apt-feature">🏢 <strong>2/5</strong>&nbsp;этаж</div>
           </div>
           <div class="apt-actions">
-            <a href="#" class="btn-apt-primary">Подробнее</a>
-            <a href="tel:+77273334455" class="btn-apt-secondary">📞 Звонок</a>
+            <a href="apartment-detail.html" class="btn-apt-primary">Подробнее</a>
+            <a href="https://wa.me/77001929260" target="_blank" class="btn-apt-secondary">💬 WA</a>
           </div>
         </div>
       </div>
@@ -229,8 +239,8 @@
             <div class="apt-feature">🏢 <strong>11/18</strong>&nbsp;этаж</div>
           </div>
           <div class="apt-actions">
-            <a href="#" class="btn-apt-primary">Подробнее</a>
-            <a href="tel:+77273334455" class="btn-apt-secondary">📞 Звонок</a>
+            <a href="apartment-detail.html" class="btn-apt-primary">Подробнее</a>
+            <a href="https://wa.me/77001929260" target="_blank" class="btn-apt-secondary">💬 WA</a>
           </div>
         </div>
       </div>
@@ -238,27 +248,22 @@
     </div>
   </section>
 
-  <!-- CTA BANNER -->
-  <section class="cta-banner">
-    <div class="container">
-      <h2>Не нашли подходящий вариант?</h2>
-      <p>Оставьте заявку и мы подберём квартиру под ваши требования и бюджет</p>
-      <div style="display:flex; gap:16px; justify-content:center; flex-wrap:wrap; position:relative;">
-        <a href="tel:+77273334455" class="btn btn-primary">📞 Позвонить нам</a>
-        <a href="index.html#about" class="btn btn-outline">Узнать о нас</a>
-      </div>
-    </div>
-  </section>
-
-  <!-- FOOTER -->
-  <footer class="footer">
-    <div class="footer-bottom" style="max-width:1200px; margin:0 auto;">
-      <p>© 2026 КвартираАлматы. Все права защищены.</p>
-      <p>Алматы, Казахстан 🇰🇿</p>
-    </div>
-  </footer>
+  <!-- FLOAT BUTTONS -->
+  <div class="float-btns">
+    <a href="https://wa.me/77001929260" target="_blank" class="float-btn float-btn-wa" title="WhatsApp">💬</a>
+    <a href="https://t.me/kvartiraalmaty" target="_blank" class="float-btn float-btn-tg" title="Telegram">✈️</a>
+  </div>
+  <button class="back-to-top" id="backToTop" title="Наверх">↑</button>
 
   <script>
+    // Burger
+    const burger = document.getElementById('burger');
+    const mobileNav = document.getElementById('mobileNav');
+    burger.addEventListener('click', () => {
+      burger.classList.toggle('open');
+      mobileNav.classList.toggle('open');
+    });
+
     // Favorite button toggle
     document.querySelectorAll('.apt-favorite').forEach(btn => {
       btn.addEventListener('click', function() {
@@ -267,7 +272,13 @@
         this.style.background = isLiked ? 'rgba(255,255,255,0.95)' : '#fff0ec';
       });
     });
+
+    // Back to top
+    const topBtn = document.getElementById('backToTop');
+    window.addEventListener('scroll', () => topBtn.classList.toggle('visible', window.scrollY > 300));
+    topBtn.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
   </script>
 
 </body>
 </html>
+
