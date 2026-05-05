@@ -1,0 +1,14 @@
+[
+  {
+    "id": 1,
+    "apt_id": "navoi72",
+    "name": "Тест Пользователь",
+    "phone": "+77001234567",
+    "check_in": "2026-05-20",
+    "check_out": "2026-05-23",
+    "pay_method": "kaspi",
+    "comment": "Тестовая бронь",
+    "status": "cancelled",
+    "created_at": "2026-05-05T16:20:15.034Z"
+  }
+]
