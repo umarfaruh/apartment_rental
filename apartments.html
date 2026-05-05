@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Квартиры в аренду — КвартираАлматы</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+
+  <!-- NAVBAR -->
+  <nav class="navbar">
+    <a href="index.html" class="navbar-logo">
+      <div class="logo-icon">🏠</div>
+      <span>Квартира<em>Алматы</em></span>
+    </a>
+    <ul class="navbar-nav">
+      <li><a href="index.html">Главная</a></li>
+      <li><a href="apartments.html" class="active">Квартиры</a></li>
+      <li><a href="index.html#services">Услуги</a></li>
+      <li><a href="index.html#about">О нас</a></li>
+      <li><a href="index.html#contact" class="navbar-cta">Связаться</a></li>
+    </ul>
+  </nav>
+
+  <!-- PAGE HERO -->
+  <div class="page-hero">
+    <nav class="breadcrumb">
+      <a href="index.html">Главная</a>
+      <span>›</span>
+      <span class="current">Квартиры</span>
+    </nav>
+    <h1>Посуточная аренда квартир в Алматы</h1>
+    <p>6 актуальных предложений — цены за сутки</p>
+  </div>
+
+  <!-- FILTER BAR -->
+  <div class="filter-bar">
+    <div class="filter-inner">
+      <div class="filter-group">
+        <span class="filter-label">Район:</span>
+        <select class="filter-select">
+          <option>Все районы</option>
+          <option>Бостандыкский</option>
+          <option>Алмалинский</option>
+          <option>Ауэзовский</option>
+          <option>Медеуский</option>
+          <option>Жетысуский</option>
+        </select>
+      </div>
+      <div class="filter-group">
+        <span class="filter-label">Комнат:</span>
+        <select class="filter-select">
+          <option>Любое</option>
+          <option>Студия</option>
+          <option>1 комната</option>
+          <option>2 комнаты</option>
+          <option>3 комнаты</option>
+        </select>
+      </div>
+      <div class="filter-group">
+        <span class="filter-label">Цена:</span>
+        <select class="filter-select">
+          <option>Любая</option>
+          <option>До 3 000 ₸</option>
+          <option>3 000 – 6 000 ₸</option>
+          <option>6 000 – 10 000 ₸</option>
+          <option>Свыше 10 000 ₸</option>
+        </select>
+      </div>
+      <div class="filter-group">
+        <span class="filter-label">Сортировка:</span>
+        <select class="filter-select">
+          <option>По умолчанию</option>
+          <option>Сначала дешевле</option>
+          <option>Сначала дороже</option>
+          <option>Сначала новые</option>
+        </select>
+      </div>
+      <span class="filter-count">Найдено: <strong>6 квартир</strong></span>
+    </div>
+  </div>
+
+  <!-- APARTMENTS GRID -->
+  <section class="apartments-section">
+    <div class="apartments-grid">
+
+      <!-- Card 1 -->
+      <div class="apt-card">
+        <div class="apt-image">
+          <div class="apt-image-bg" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
+            🛋️
+          </div>
+          <span class="apt-badge badge-popular">Популярное</span>
+          <button class="apt-favorite" title="В избранное">🤍</button>
+        </div>
+        <div class="apt-info">
+          <div class="apt-price">4 000 ₸ <span>/ сутки</span></div>
+          <h3 class="apt-title">Уютная 1-комнатная квартира</h3>
+          <div class="apt-address">📍 Бостандыкский р-н, ул. Навои 72</div>
+          <div class="apt-features">
+            <div class="apt-feature">🛏️ <strong>1</strong>&nbsp;комн.</div>
+            <div class="apt-feature">📐 <strong>42</strong>&nbsp;м²</div>
+            <div class="apt-feature">🏢 <strong>5/9</strong>&nbsp;этаж</div>
+          </div>
+          <div class="apt-actions">
+            <a href="#" class="btn-apt-primary">Подробнее</a>
+            <a href="tel:+77273334455" class="btn-apt-secondary">📞 Звонок</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Card 2 -->
+      <div class="apt-card">
+        <div class="apt-image">
+          <div class="apt-image-bg" style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);">
+            🏙️
+          </div>
+          <span class="apt-badge badge-new">Новое</span>
+          <button class="apt-favorite" title="В избранное">🤍</button>
+        </div>
+        <div class="apt-info">
+          <div class="apt-price">6 000 ₸ <span>/ сутки</span></div>
+          <h3 class="apt-title">Просторная 2-комнатная с видом</h3>
+          <div class="apt-address">📍 Медеуский р-н, ул. Достык 145</div>
+          <div class="apt-features">
+            <div class="apt-feature">🛏️ <strong>2</strong>&nbsp;комн.</div>
+            <div class="apt-feature">📐 <strong>65</strong>&nbsp;м²</div>
+            <div class="apt-feature">🏢 <strong>8/12</strong>&nbsp;этаж</div>
+          </div>
+          <div class="apt-actions">
+            <a href="#" class="btn-apt-primary">Подробнее</a>
+            <a href="tel:+77273334455" class="btn-apt-secondary">📞 Звонок</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Card 3 -->
+      <div class="apt-card">
+        <div class="apt-image">
+          <div class="apt-image-bg" style="background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);">
+            🌿
+          </div>
+          <span class="apt-badge badge-premium">Премиум</span>
+          <button class="apt-favorite" title="В избранное">🤍</button>
+        </div>
+        <div class="apt-info">
+          <div class="apt-price">10 500 ₸ <span>/ сутки</span></div>
+          <h3 class="apt-title">Элитные апартаменты в центре</h3>
+          <div class="apt-address">📍 Алмалинский р-н, пр. Абая 44</div>
+          <div class="apt-features">
+            <div class="apt-feature">🛏️ <strong>3</strong>&nbsp;комн.</div>
+            <div class="apt-feature">📐 <strong>110</strong>&nbsp;м²</div>
+            <div class="apt-feature">🏢 <strong>14/16</strong>&nbsp;этаж</div>
+          </div>
+          <div class="apt-actions">
+            <a href="#" class="btn-apt-primary">Подробнее</a>
+            <a href="tel:+77273334455" class="btn-apt-secondary">📞 Звонок</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Card 4 -->
+      <div class="apt-card">
+        <div class="apt-image">
+          <div class="apt-image-bg" style="background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);">
+            🏡
+          </div>
+          <span class="apt-badge badge-new">Новое</span>
+          <button class="apt-favorite" title="В избранное">🤍</button>
+        </div>
+        <div class="apt-info">
+          <div class="apt-price">3 000 ₸ <span>/ сутки</span></div>
+          <h3 class="apt-title">Студия рядом с метро</h3>
+          <div class="apt-address">📍 Ауэзовский р-н, ул. Саина 3</div>
+          <div class="apt-features">
+            <div class="apt-feature">🛏️ <strong>Студия</strong></div>
+            <div class="apt-feature">📐 <strong>28</strong>&nbsp;м²</div>
+            <div class="apt-feature">🏢 <strong>3/9</strong>&nbsp;этаж</div>
+          </div>
+          <div class="apt-actions">
+            <a href="#" class="btn-apt-primary">Подробнее</a>
+            <a href="tel:+77273334455" class="btn-apt-secondary">📞 Звонок</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Card 5 -->
+      <div class="apt-card">
+        <div class="apt-image">
+          <div class="apt-image-bg" style="background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);">
+            ☀️
+          </div>
+          <span class="apt-badge badge-popular">Популярное</span>
+          <button class="apt-favorite" title="В избранное">🤍</button>
+        </div>
+        <div class="apt-info">
+          <div class="apt-price">5 000 ₸ <span>/ сутки</span></div>
+          <h3 class="apt-title">2-комнатная у парка Горького</h3>
+          <div class="apt-address">📍 Алмалинский р-н, ул. Гоголя 20</div>
+          <div class="apt-features">
+            <div class="apt-feature">🛏️ <strong>2</strong>&nbsp;комн.</div>
+            <div class="apt-feature">📐 <strong>58</strong>&nbsp;м²</div>
+            <div class="apt-feature">🏢 <strong>2/5</strong>&nbsp;этаж</div>
+          </div>
+          <div class="apt-actions">
+            <a href="#" class="btn-apt-primary">Подробнее</a>
+            <a href="tel:+77273334455" class="btn-apt-secondary">📞 Звонок</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Card 6 -->
+      <div class="apt-card">
+        <div class="apt-image">
+          <div class="apt-image-bg" style="background: linear-gradient(135deg, #a18cd1 0%, #fbc2eb 100%);">
+            🌙
+          </div>
+          <span class="apt-badge badge-premium">Премиум</span>
+          <button class="apt-favorite" title="В избранное">🤍</button>
+        </div>
+        <div class="apt-info">
+          <div class="apt-price">9 000 ₸ <span>/ сутки</span></div>
+          <h3 class="apt-title">3-комнатная с панорамными окнами</h3>
+          <div class="apt-address">📍 Бостандыкский р-н, мкр. Самал-2</div>
+          <div class="apt-features">
+            <div class="apt-feature">🛏️ <strong>3</strong>&nbsp;комн.</div>
+            <div class="apt-feature">📐 <strong>95</strong>&nbsp;м²</div>
+            <div class="apt-feature">🏢 <strong>11/18</strong>&nbsp;этаж</div>
+          </div>
+          <div class="apt-actions">
+            <a href="#" class="btn-apt-primary">Подробнее</a>
+            <a href="tel:+77273334455" class="btn-apt-secondary">📞 Звонок</a>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- CTA BANNER -->
+  <section class="cta-banner">
+    <div class="container">
+      <h2>Не нашли подходящий вариант?</h2>
+      <p>Оставьте заявку и мы подберём квартиру под ваши требования и бюджет</p>
+      <div style="display:flex; gap:16px; justify-content:center; flex-wrap:wrap; position:relative;">
+        <a href="tel:+77273334455" class="btn btn-primary">📞 Позвонить нам</a>
+        <a href="index.html#about" class="btn btn-outline">Узнать о нас</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    <div class="footer-bottom" style="max-width:1200px; margin:0 auto;">
+      <p>© 2026 КвартираАлматы. Все права защищены.</p>
+      <p>Алматы, Казахстан 🇰🇿</p>
+    </div>
+  </footer>
+
+  <script>
+    // Favorite button toggle
+    document.querySelectorAll('.apt-favorite').forEach(btn => {
+      btn.addEventListener('click', function() {
+        const isLiked = this.textContent === '❤️';
+        this.textContent = isLiked ? '🤍' : '❤️';
+        this.style.background = isLiked ? 'rgba(255,255,255,0.95)' : '#fff0ec';
+      });
+    });
+  </script>
+
+</body>
+</html>
