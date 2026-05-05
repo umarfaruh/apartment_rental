@@ -124,6 +124,25 @@
         </iframe>
       </div>
 
+      <!-- Occupancy calendar -->
+      <h3 class="detail-section-title">Календарь занятости</h3>
+      <div class="occupancy-wrap">
+        <div class="occupancy-head">
+          <button class="occ-nav" id="occPrev" type="button">‹</button>
+          <div class="occ-month" id="occMonth">Май 2026</div>
+          <button class="occ-nav" id="occNext" type="button">›</button>
+        </div>
+        <div class="occ-weekdays">
+          <div>Пн</div><div>Вт</div><div>Ср</div><div>Чт</div><div>Пт</div><div>Сб</div><div>Вс</div>
+        </div>
+        <div class="occ-grid" id="occGrid"></div>
+        <div class="occ-legend">
+          <span><i class="dot free"></i> Свободно</span>
+          <span><i class="dot booked"></i> Занято</span>
+          <span><i class="dot selected"></i> Выбранные даты</span>
+        </div>
+      </div>
+
     </div>
 
     <!-- RIGHT: Booking card -->
@@ -150,6 +169,10 @@
             <span id="calcNightsTotal">0 ₸</span>
           </div>
           <div class="calc-row">
+            <span>Предоплата (30%)</span>
+            <span id="calcPrepay">0 ₸</span>
+          </div>
+          <div class="calc-row">
             <span>Залог (возвращается)</span>
             <span>10 000 ₸</span>
           </div>
@@ -158,6 +181,17 @@
             <span id="calcTotal">0 ₸</span>
           </div>
         </div>
+
+        <div class="form-group">
+          <label>Способ предоплаты</label>
+          <div class="pay-methods" id="payMethods">
+            <button type="button" class="pay-pill active" data-pay="kaspi">Kaspi</button>
+            <button type="button" class="pay-pill" data-pay="card">Банковская карта</button>
+          </div>
+          <div class="pay-note" id="payNote">После заявки откроется WhatsApp с подтверждением брони и инструкцией по Kaspi.</div>
+        </div>
+
+        <div class="booking-warning" id="bookingWarning"></div>
 
         <div class="form-group">
           <label>Ваше имя</label>
@@ -173,10 +207,19 @@
         </div>
 
         <div class="booking-actions">
-          <button class="btn-book" onclick="bookViaEmail()">📧 Отправить заявку</button>
+          <button class="btn-book" onclick="bookWithPrepay()">💳 Забронировать и внести предоплату</button>
           <a class="btn-wa-book" id="waBookBtn" href="#" onclick="return bookViaWA(event)">
             💬 Забронировать в WhatsApp
           </a>
+        </div>
+
+        <div class="notify-panel">
+          <div class="notify-title">WhatsApp-уведомления клиенту</div>
+          <div class="notify-actions">
+            <button type="button" class="notify-btn" onclick="sendClientReminder('confirm')">Подтверждение</button>
+            <button type="button" class="notify-btn" onclick="sendClientReminder('checkin')">Напомнить о заезде</button>
+            <button type="button" class="notify-btn" onclick="sendClientReminder('checkout')">Напомнить о выезде</button>
+          </div>
         </div>
       </div>
     </div>
@@ -186,9 +229,9 @@
   <!-- FLOAT BUTTONS -->
   <div class="float-btns">
     <a href="https://wa.me/77001929260" target="_blank" class="float-btn float-btn-wa" title="WhatsApp">💬</a>
-    <a href="https://t.me/kvartiraalmaty" target="_blank" class="float-btn float-btn-tg" title="Telegram">✈️</a>
   </div>
   <button class="back-to-top" id="backToTop" title="Наверх">↑</button>
+  <div id="google_translate_element" class="translate-box"></div>
 
   <script>
     // Burger
@@ -213,42 +256,241 @@
     // Calculator
     const PRICE = 4000;
     const DEPOSIT = 10000;
+    const PREPAY_PERCENT = 0.3;
+    let selectedPay = 'kaspi';
+    let currentMonth = new Date();
+
+    // Persisted occupied dates (mock storage in browser)
+    const defaultOccupied = [
+      '2026-05-10', '2026-05-11', '2026-05-15', '2026-05-16', '2026-05-22',
+      '2026-05-25', '2026-06-02', '2026-06-03', '2026-06-14'
+    ];
+
+    function getOccupiedDates() {
+      const fromStorage = localStorage.getItem('occupiedDatesNavoi72');
+      if (fromStorage) {
+        try { return JSON.parse(fromStorage); } catch (_) {}
+      }
+      localStorage.setItem('occupiedDatesNavoi72', JSON.stringify(defaultOccupied));
+      return [...defaultOccupied];
+    }
+
+    function setOccupiedDates(dates) {
+      localStorage.setItem('occupiedDatesNavoi72', JSON.stringify(dates));
+    }
+
+    function formatISO(d) {
+      const y = d.getFullYear();
+      const m = String(d.getMonth() + 1).padStart(2, '0');
+      const day = String(d.getDate()).padStart(2, '0');
+      return `${y}-${m}-${day}`;
+    }
+
+    function getRangeDates(start, end) {
+      const out = [];
+      const d = new Date(start);
+      const stop = new Date(end);
+      while (d < stop) {
+        out.push(formatISO(d));
+        d.setDate(d.getDate() + 1);
+      }
+      return out;
+    }
+
+    function intersectsOccupied(start, end) {
+      if (!start || !end) return false;
+      const occupied = new Set(getOccupiedDates());
+      return getRangeDates(start, end).some(d => occupied.has(d));
+    }
+
+    function renderOccupancyCalendar() {
+      const monthNames = ['Январь', 'Февраль', 'Март', 'Апрель', 'Май', 'Июнь', 'Июль', 'Август', 'Сентябрь', 'Октябрь', 'Ноябрь', 'Декабрь'];
+      const occMonth = document.getElementById('occMonth');
+      const occGrid = document.getElementById('occGrid');
+      occMonth.textContent = `${monthNames[currentMonth.getMonth()]} ${currentMonth.getFullYear()}`;
+      occGrid.innerHTML = '';
+
+      const first = new Date(currentMonth.getFullYear(), currentMonth.getMonth(), 1);
+      const daysInMonth = new Date(currentMonth.getFullYear(), currentMonth.getMonth() + 1, 0).getDate();
+      const startShift = (first.getDay() + 6) % 7;
+      const occupied = new Set(getOccupiedDates());
+
+      for (let i = 0; i < startShift; i++) {
+        const c = document.createElement('div');
+        c.className = 'occ-day muted';
+        occGrid.appendChild(c);
+      }
+
+      const ci = document.getElementById('checkIn').value;
+      const co = document.getElementById('checkOut').value;
+      const selected = new Set(ci && co ? getRangeDates(ci, co) : []);
+
+      for (let day = 1; day <= daysInMonth; day++) {
+        const date = new Date(currentMonth.getFullYear(), currentMonth.getMonth(), day);
+        const iso = formatISO(date);
+        const c = document.createElement('div');
+        c.className = 'occ-day ' + (occupied.has(iso) ? 'booked' : 'free');
+        if (selected.has(iso)) c.classList.add('selected');
+        c.textContent = String(day);
+        occGrid.appendChild(c);
+      }
+    }
 
     function calcCost() {
       const ci = document.getElementById('checkIn').value;
       const co = document.getElementById('checkOut').value;
-      if (!ci || !co) return;
+      const warning = document.getElementById('bookingWarning');
+      warning.classList.remove('show');
+      warning.textContent = '';
+      if (!ci || !co) {
+        renderOccupancyCalendar();
+        return;
+      }
       const d1 = new Date(ci), d2 = new Date(co);
       const nights = Math.max(0, Math.round((d2 - d1) / 86400000));
-      if (nights <= 0) return;
+      if (nights <= 0) {
+        warning.textContent = 'Дата выезда должна быть позже даты заезда.';
+        warning.classList.add('show');
+        return;
+      }
+      if (intersectsOccupied(ci, co)) {
+        warning.textContent = 'В выбранном диапазоне есть занятые даты. Выберите другие даты.';
+        warning.classList.add('show');
+        return;
+      }
       const nightsTotal = nights * PRICE;
+      const prepay = Math.round(nightsTotal * PREPAY_PERCENT);
       const total = nightsTotal + DEPOSIT;
       document.getElementById('calcDays').textContent = `${nights} ноч. × ${PRICE.toLocaleString('ru')} ₸`;
       document.getElementById('calcNightsTotal').textContent = nightsTotal.toLocaleString('ru') + ' ₸';
+      document.getElementById('calcPrepay').textContent = prepay.toLocaleString('ru') + ' ₸';
       document.getElementById('calcTotal').textContent = total.toLocaleString('ru') + ' ₸';
       document.getElementById('calcResult').style.display = 'block';
+      renderOccupancyCalendar();
     }
 
     document.getElementById('checkIn').addEventListener('change', calcCost);
     document.getElementById('checkOut').addEventListener('change', calcCost);
+    document.getElementById('occPrev').addEventListener('click', () => {
+      currentMonth = new Date(currentMonth.getFullYear(), currentMonth.getMonth() - 1, 1);
+      renderOccupancyCalendar();
+    });
+    document.getElementById('occNext').addEventListener('click', () => {
+      currentMonth = new Date(currentMonth.getFullYear(), currentMonth.getMonth() + 1, 1);
+      renderOccupancyCalendar();
+    });
+
+    document.querySelectorAll('#payMethods .pay-pill').forEach(btnPay => {
+      btnPay.addEventListener('click', function() {
+        document.querySelectorAll('#payMethods .pay-pill').forEach(b => b.classList.remove('active'));
+        this.classList.add('active');
+        selectedPay = this.dataset.pay;
+        document.getElementById('payNote').textContent = selectedPay === 'kaspi'
+          ? 'После заявки откроется WhatsApp с подтверждением брони и инструкцией по Kaspi.'
+          : 'После заявки откроется WhatsApp с подтверждением брони и ссылкой для оплаты картой.';
+      });
+    });
 
     // Set min date = today
     const today = new Date().toISOString().split('T')[0];
     document.getElementById('checkIn').min = today;
     document.getElementById('checkOut').min = today;
 
-    // Book via Email
-    function bookViaEmail() {
+    function getBookingData() {
       const name = document.getElementById('bookName').value || 'не указано';
       const phone = document.getElementById('bookPhone').value || 'не указан';
-      const ci = document.getElementById('checkIn').value || 'не выбрана';
-      const co = document.getElementById('checkOut').value || 'не выбрана';
-      const comment = document.getElementById('bookComment').value || '';
-      const subject = encodeURIComponent('Бронирование: 1-комнатная, ул. Навои 72');
-      const body = encodeURIComponent(
-        `Имя: ${name}\nТелефон: ${phone}\nДата заезда: ${ci}\nДата выезда: ${co}\nКомментарий: ${comment}`
+      const ci = document.getElementById('checkIn').value || '';
+      const co = document.getElementById('checkOut').value || '';
+      if (!ci || !co || intersectsOccupied(ci, co)) return null;
+      const nights = Math.max(0, Math.round((new Date(co) - new Date(ci)) / 86400000));
+      if (nights <= 0) return null;
+      const nightsTotal = nights * PRICE;
+      const prepay = Math.round(nightsTotal * PREPAY_PERCENT);
+      const total = nightsTotal + DEPOSIT;
+      return { name, phone, ci, co, nights, nightsTotal, prepay, total };
+    }
+
+    function bookWithPrepay() {
+      const data = getBookingData();
+      const warning = document.getElementById('bookingWarning');
+      if (!data) {
+        warning.textContent = 'Проверьте даты: заполните корректный диапазон без занятых дней.';
+        warning.classList.add('show');
+        return;
+      }
+      const occupied = new Set(getOccupiedDates());
+      getRangeDates(data.ci, data.co).forEach(d => occupied.add(d));
+      setOccupiedDates(Array.from(occupied));
+      renderOccupancyCalendar();
+
+      const payLabel = selectedPay === 'kaspi' ? 'Kaspi' : 'Банковская карта';
+      const payHint = selectedPay === 'kaspi'
+        ? 'Оплата предоплаты через Kaspi перевод.'
+        : 'Оплата предоплаты по ссылке банковской карты.';
+
+      const text = encodeURIComponent(
+        `Новая бронь (предоплата)\n` +
+        `Квартира: ул. Навои 72\n` +
+        `Имя: ${data.name}\nТелефон: ${data.phone}\n` +
+        `Заезд: ${data.ci}\nВыезд: ${data.co}\n` +
+        `Ночей: ${data.nights}\n` +
+        `Способ оплаты: ${payLabel}\n` +
+        `Сумма предоплаты: ${data.prepay.toLocaleString('ru')} ₸\n` +
+        `${payHint}`
       );
-      window.location.href = `mailto:info@kvartira-almaty.kz?subject=${subject}&body=${body}`;
+      window.open(`https://wa.me/77001929260?text=${text}`, '_blank');
+
+      scheduleBrowserNotifications(data);
+      warning.textContent = 'Бронь зафиксирована в календаре. Отправлено подтверждение менеджеру в WhatsApp.';
+      warning.classList.add('show');
+    }
+
+    function normalizePhone(phone) {
+      const digits = phone.replace(/\D/g, '');
+      if (!digits) return '';
+      if (digits.startsWith('8') && digits.length === 11) return '7' + digits.slice(1);
+      if (digits.length === 10) return '7' + digits;
+      return digits;
+    }
+
+    function sendClientReminder(type) {
+      const data = getBookingData();
+      if (!data) {
+        const warning = document.getElementById('bookingWarning');
+        warning.textContent = 'Сначала выберите корректные даты и заполните телефон клиента.';
+        warning.classList.add('show');
+        return;
+      }
+      const clientPhone = normalizePhone(data.phone);
+      if (!clientPhone) return;
+
+      const templates = {
+        confirm: `Здравствуйте, ${data.name}! Ваша бронь подтверждена. Заезд ${data.ci}, выезд ${data.co}. Ждём вас!`,
+        checkin: `Напоминание: ваш заезд сегодня (${data.ci}). Если нужна помощь по заселению, напишите нам.`,
+        checkout: `Напоминание: сегодня выезд (${data.co}) до 12:00. Спасибо, что выбрали нас!`
+      };
+      window.open(`https://wa.me/${clientPhone}?text=${encodeURIComponent(templates[type])}`, '_blank');
+    }
+
+    function scheduleBrowserNotifications(data) {
+      if (!('Notification' in window)) return;
+      if (Notification.permission === 'default') Notification.requestPermission();
+      if (Notification.permission !== 'granted') return;
+
+      const now = Date.now();
+      const checkInTs = new Date(data.ci + 'T10:00:00').getTime();
+      const checkOutTs = new Date(data.co + 'T10:00:00').getTime();
+
+      [
+        { at: now + 8000, title: 'Бронь подтверждена', body: `Клиент ${data.name}, заезд ${data.ci}` },
+        { at: checkInTs - 3600000, title: 'Скоро заезд', body: `Напомнить клиенту о заезде ${data.ci}` },
+        { at: checkOutTs - 3600000, title: 'Скоро выезд', body: `Напомнить клиенту о выезде ${data.co}` }
+      ].forEach(item => {
+        const delay = item.at - Date.now();
+        if (delay > 0 && delay < 2147483647) {
+          setTimeout(() => new Notification(item.title, { body: item.body }), delay);
+        }
+      });
     }
 
     // Book via WhatsApp
@@ -266,13 +508,26 @@
       window.open(`https://wa.me/77001929260?text=${msg}`, '_blank');
     }
 
+    // Init calendar
+    renderOccupancyCalendar();
+
     // Back to top
     const btn = document.getElementById('backToTop');
     window.addEventListener('scroll', () => {
       btn.classList.toggle('visible', window.scrollY > 300);
     });
     btn.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
+
+    // Global translate (all available languages)
+    function googleTranslateElementInit() {
+      new google.translate.TranslateElement(
+        { pageLanguage: 'ru', autoDisplay: false },
+        'google_translate_element'
+      );
+    }
+    window.googleTranslateElementInit = googleTranslateElementInit;
   </script>
+  <script src="https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
 
 </body>
 </html>
