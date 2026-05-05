@@ -123,39 +123,6 @@
     </div>
   </section>
 
-  <!-- HOW IT WORKS -->
-  <section class="section section-alt">
-    <div class="container">
-      <div class="section-header">
-        <span class="section-label">Как это работает</span>
-        <h2>Аренда в 4 простых шага</h2>
-        <p>От заявки до заселения — всего несколько дней</p>
-      </div>
-      <div class="steps-grid">
-        <div class="step-card">
-          <div class="step-number">1</div>
-          <h3>Оставьте заявку</h3>
-          <p>Опишите ваши требования к квартире: район, бюджет, количество комнат</p>
-        </div>
-        <div class="step-card">
-          <div class="step-number">2</div>
-          <h3>Подбор вариантов</h3>
-          <p>Наш менеджер подберёт подходящие квартиры и пришлёт вам предложения</p>
-        </div>
-        <div class="step-card">
-          <div class="step-number">3</div>
-          <h3>Просмотр и выбор</h3>
-          <p>Организуем показы понравившихся квартир в удобное для вас время</p>
-        </div>
-        <div class="step-card">
-          <div class="step-number">4</div>
-          <h3>Заселение</h3>
-          <p>Подписываем договор, получаете ключи и заселяетесь в тот же день</p>
-        </div>
-      </div>
-    </div>
-  </section>
-
   <!-- TESTIMONIALS -->
   <section class="section">
     <div class="container">
@@ -266,9 +233,9 @@
   <!-- FLOAT BUTTONS -->
   <div class="float-btns">
     <a href="https://wa.me/77001929260" target="_blank" class="float-btn float-btn-wa" title="WhatsApp">💬</a>
-    <a href="https://t.me/kvartiraalmaty" target="_blank" class="float-btn float-btn-tg" title="Telegram">✈️</a>
   </div>
   <button class="back-to-top" id="backToTop" title="Наверх">↑</button>
+  <div id="google_translate_element" class="translate-box"></div>
 
   <!-- FOOTER -->
   <footer class="footer">
@@ -306,7 +273,18 @@
     const topBtn = document.getElementById('backToTop');
     window.addEventListener('scroll', () => topBtn.classList.toggle('visible', window.scrollY > 300));
     topBtn.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
+
+    // Global translate (all available languages)
+    function googleTranslateElementInit() {
+      new google.translate.TranslateElement(
+        { pageLanguage: 'ru', autoDisplay: false },
+        'google_translate_element'
+      );
+    }
+    window.googleTranslateElementInit = googleTranslateElementInit;
   </script>
+  <script src="https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
 
 </body>
 </html>
+
